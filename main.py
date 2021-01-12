@@ -12,10 +12,13 @@ layout = [[sg.Text(';)')],
             [sg.Button('B'), sg.Text('Butler')],
             [sg.Button('Exit')]]
 
-window = sg.Window('Airac', layout)
+layoutButler = [[sg.Text('Press Load                                       ', key='-text-')],
+                [sg.Text("Tasks")],
+                [sg.Text('None :)                                                       ', key='-tasks-')],
+                [sg.Button('Load'), sg.Button('Exit')]]
 
-def print_hi(hi_name):
-    print(f'Hi, {hi_name}')
+window = sg.Window('Airac', layout)
+butlerWin = sg.Window('Butler', layoutButler, resizable=True)
 
 
 def get_action_field(argument):
@@ -48,42 +51,52 @@ def today():
         5: "Saturday",
         6: "Sunday"
     }
-    print("Today is " + weekday.get(day, "Invalid Choice of Weekday"))
-    return day
+    weekday = weekday.get(day, "Invalid Choice of Weekday")
+    print("Today is " + weekday)
+    return day, weekday
 
 
 # parser needs to read file first, then add option to add tasks in terminal
 def parseToday(day):
     df = pd.read_csv('tasks.txt')
     tasks = df.values
+    tasklist = ''
     length = (tasks.size / 3)
     i = 0
     while(i<length):
         if tasks[i,0] == day:
+            tasklist += tasks[i,2]
+            tasklist += "\n"
             print(tasks[i,2])
         i += 1
+    return tasklist
+
+def butlerUI():
+    while True:
+        day, weekday = today()
+        tasklist = parseToday(day)
+
+        eventb, valuesb = butlerWin.read()
+        butlerWin['-text-'].set_size((None,4))
+        butlerWin['-tasks-'].set_size((None,15))
+        butlerWin['-text-'].update("Today is: " + weekday )
+        butlerWin['-tasks-'].update(tasklist)
+        if eventb == 'Load':
+            continue
+        if eventb == sg.WIN_CLOSED or eventb == 'Exit':
+            butlerWin.close()
+            break
+
+while True:
+    event, values = window.read()
+    print("You clicked " + str(event))
+    if event == sg.WIN_CLOSED or event == 'Exit':
+        break
+    if event == 'B':
+        butlerUI()
+
+
 
 
 window.close()
-
-if __name__ == '__main__':
-    print(";)")
-    name = "Alex"
-    print_hi(name)
-    done = False
-    while not done:
-        print("What would you like to do?\n" +
-              "0: Arithmetic // 1: Financials // 2: ToDay")
-        choice = int(input())
-        #print("You chose " + get_action_field(choice))
-        if choice == 0:
-            arithmetic()
-        elif choice == 1:
-            fin_viz()
-        elif choice == 2:
-            day = today()
-            parseToday(day)
-        else:
-            print("Invalid Choice")
-            done = True
-    print('Byeeee')
+print('Byeeee')
