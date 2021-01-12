@@ -1,0 +1,8 @@
+day,class,desc
+6,0,Assess week's shit
+0,0,Machine Learning 1pm
+6,0,Take out trash
+8,1,Workout
+1,0,Attend Transportation-9:30
+1,0,Attend Networks-11:00
+1,0,Attend Purchasing-12:30
