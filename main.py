@@ -72,20 +72,25 @@ def parseToday(day):
     return tasklist
 
 def butlerUI():
-    while True:
-        day, weekday = today()
-        tasklist = parseToday(day)
-
-        eventb, valuesb = butlerWin.read()
-        butlerWin['-text-'].set_size((None,4))
-        butlerWin['-tasks-'].set_size((None,15))
-        butlerWin['-text-'].update("Today is: " + weekday )
-        butlerWin['-tasks-'].update(tasklist)
-        if eventb == 'Load':
-            continue
-        if eventb == sg.WIN_CLOSED or eventb == 'Exit':
-            butlerWin.close()
-            break
+    day, weekday = today()
+    tasklist = parseToday(day)
+    eventb, valuesb = butlerWin.read()
+    butlerWin['-text-'].set_size((None,4))
+    butlerWin['-tasks-'].set_size((None,15))
+    butlerWin['-text-'].update("Today is: " + weekday )
+    butlerWin['-tasks-'].update(tasklist)
+    butlerWin.read()
+    # while True:
+    #     eventb, valuesb = butlerWin.read()
+    #     butlerWin['-text-'].set_size((None,4))
+    #     butlerWin['-tasks-'].set_size((None,15))
+    #     butlerWin['-text-'].update("Today is: " + weekday )
+    #     butlerWin['-tasks-'].update(tasklist)
+    #     if eventb == 'Load':
+    #         continue
+    #     if eventb == sg.WIN_CLOSED or eventb == 'Exit':
+    #         butlerWin.close()
+    #         break
 
 while True:
     event, values = window.read()
