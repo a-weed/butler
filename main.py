@@ -54,24 +54,27 @@ def today():
         6: "Sunday"
     }
     weekday = weekday.get(day, "Invalid Choice of Weekday")
-    print("Today is " + weekday)
     return day, weekday
 
 
-# parser needs to read file first, then add option to add tasks in terminal
+
 def parseToday(day):
     df = pd.read_csv('tasks.txt')
     tasks = df.values
     tasklist = ''
-    length = (tasks.size / 3)
+    length = (tasks.size / 4)
     i = 0
     while(i<length):
-        if tasks[i,0] == day or tasks[i,0] == 8:
+        # if tasks[i,0] == day or tasks[i,0] == 8
+        if (str(day) in str(tasks[i,0])) or ('8' in str(tasks[i,0])):
             tasklist += tasks[i,2]
             tasklist += "\n"
         i += 1
     return tasklist
 
+# todo only need to parse today once, can manually re-do through Load button
+# todo addTask()
+# todo schedule order (times in array)
 def butlerUI():
     global inButler
     day, weekday = today()
