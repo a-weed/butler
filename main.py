@@ -3,8 +3,10 @@ import numpy as np
 import datetime
 import PySimpleGUI as sg
 
+#Mr. Dalliard
 sg.theme('DarkAmber')
 
+#Fix formatting
 layout = [[sg.Text(';)')],
             [sg.Text('What must be done?')],
             [sg.Button('A'), sg.Text('Arithmetic')],
@@ -64,44 +66,51 @@ def parseToday(day):
     length = (tasks.size / 3)
     i = 0
     while(i<length):
-        if tasks[i,0] == day:
+        if tasks[i,0] == day or tasks[i,0] == 8:
             tasklist += tasks[i,2]
             tasklist += "\n"
-            print(tasks[i,2])
         i += 1
     return tasklist
 
 def butlerUI():
+    global inButler
     day, weekday = today()
     tasklist = parseToday(day)
-    eventb, valuesb = butlerWin.read()
-    butlerWin['-text-'].set_size((None,4))
+    event, values = butlerWin.Read(timeout=500, timeout_key="__BUTLER_TIMEOUT__")
+    print(f"You clicked {event}")
+    butlerWin['-text-'].set_size((None, 4))
     butlerWin['-tasks-'].set_size((None,15))
     butlerWin['-text-'].update("Today is: " + weekday )
     butlerWin['-tasks-'].update(tasklist)
-    butlerWin.read()
-    # while True:
-    #     eventb, valuesb = butlerWin.read()
-    #     butlerWin['-text-'].set_size((None,4))
-    #     butlerWin['-tasks-'].set_size((None,15))
-    #     butlerWin['-text-'].update("Today is: " + weekday )
-    #     butlerWin['-tasks-'].update(tasklist)
-    #     if eventb == 'Load':
-    #         continue
-    #     if eventb == sg.WIN_CLOSED or eventb == 'Exit':
-    #         butlerWin.close()
-    #         break
+    if event == sg.WIN_CLOSED or event == 'Exit':
+        inButler = False
+        butlerWin.close()
 
+inButler = False
 while True:
-    event, values = window.read()
-    print("You clicked " + str(event))
+    event, values = window.Read(timeout=3000, timeout_key="__TIMEOUT__")
+    print(f"You clicked {event}")
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     if event == 'B':
+        inButler= True
+        butlerUI()
+    if event == 'S':
+        fin_viz()
+    if event == 'A':
+        arithmetic()
+    if inButler == True:
         butlerUI()
 
 
 
 
+butlerWin.close()
 window.close()
 print('Byeeee')
+
+# while True:
+#     event, values = window1.Read(timeout=500)
+#     # do something with the info
+#     event, values = window2.ReadNonBlocking()
+#     # do something with these values too
